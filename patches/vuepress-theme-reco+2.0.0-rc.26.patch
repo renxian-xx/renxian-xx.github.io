@@ -1,0 +1,13 @@
+diff --git a/node_modules/vuepress-theme-reco/lib/client/components/PageInfo.vue b/node_modules/vuepress-theme-reco/lib/client/components/PageInfo.vue
+index 718e1ba..74f2de3 100644
+--- a/node_modules/vuepress-theme-reco/lib/client/components/PageInfo.vue
++++ b/node_modules/vuepress-theme-reco/lib/client/components/PageInfo.vue
+@@ -2,7 +2,7 @@
+   <div v-if="showPageInfo" class="page-info">
+     <Xicons v-if="!!author" :icon="IconUser" :text="author" />
+ 
+-    <Xicons v-if="!!date" :icon="IconCalendar" :text="date" />
++    <Xicons v-if="!!date" :icon="IconCalendar" :text="date.substring(0, 10)" />
+ 
+     <Xicons v-if="categories.length > 0" :icon="IconFolder">
+       <router-link
