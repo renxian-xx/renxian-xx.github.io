@@ -1,6 +1,6 @@
 ---
 title: lua-通过设置闭包upvalue实现function直接访问table属性
-date: 2026/06/29 10:00:00
+date: 2025/08/07 00:00:00
 tags:
   - Lua
 ---

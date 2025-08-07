@@ -1,8 +1,8 @@
 ---
 title: java-使用自定义注解代替@RequestBody实现根据参数名注入json数据
-date: 2026/06/29 10:00:00
+date: 2025/08/06 00:00:00
 tags:
-  - Lua
+  - Java
 ---
 
 ## 一、背景
