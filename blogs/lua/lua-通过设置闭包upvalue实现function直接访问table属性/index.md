@@ -99,6 +99,8 @@ _ENV是一个特殊的表，代表的是Lua的全局环境，访问_ENV中的变
 
 ## 四、代码实现
 
+为减少篇幅，这里仅展示删减的代码，完整版本参见Github地址：[lua-space](https://github.com/renxian-xx/lua-space.git)
+
 ### 1. 第一版
 
 第一版是直接访问表属性，代码如下：
@@ -131,7 +133,7 @@ SetEnvHandler = function(value, handler)
     return value
 end
 
--- 模板创建函数
+-- 模块创建函数
 Space = function(instance)
     local handler = {
         get = function(env, key)
@@ -226,18 +228,30 @@ SetEnvProxy = function(value, proxy_closure)
 end
 
 Space = function(instance, parent)
+    local proxy_instance
+    local handle_keyword_index = function(key)
+        if key == "this" then
+            return proxy_instance
+        end
+        if key == "super" then
+            return parent
+        end
+    end
+    local handle_keyword_newindex = function(key)
+        if key == "this" then
+            error("Cannot rewrite 'this'") -- 禁止重写this
+        end
+        if key == "super" then
+            error("Cannot rewrite 'super'") -- 禁止重写super
+        end
+    end
     local proxy_env = setmetatable({}, {
-        __index = function(_, k)
-            if k == "this" then
-                return instance -- 如果访问this，则返回instance
-            end
-            if k == "super" then
-                return parent -- 如果访问super，则返回parent
-            end
-            return _ENV[k] -- 否则返回_ENV中的对应值
+        __index = function(_, key)
+            return handle_keyword_index(key) or _ENV[key] -- 否则返回_ENV中的对应值
         end;
-        __newindex = function(_, k, v)
-            _ENV[k] = v
+        __newindex = function(_, key, value)
+            handle_keyword_newindex(key)
+            _ENV[key] = value
         end;
     })
     -- 创建一个闭包，使其第一个上值为proxy_env
@@ -245,30 +259,26 @@ Space = function(instance, parent)
         local _ = proxy_env
     end
 
-    for _, v in pairs(instance) do
-        if (type(v) == "function") then
-            SetEnvProxy(v, proxy_closure)
-        end
-    end
-    -- 处理外部访问模块的情况，将访问和修改代理到instance中
-    return setmetatable({}, {
+    -- 对instance的操作代理
+    proxy_instance = setmetatable({}, {
         __index = function(_, key)
-            return instance[key]
+            return handle_keyword_index(key) or instance[key]
         end;
         __newindex = function(_, key, value)
+            handle_keyword_newindex(key)
             if (type(value) == "function") then
-                value = SetEnvProxy(value, proxy_closure)
+                value = SetEnvProxy(value, proxy_closure) -- 如果value是函数，则设置_ENV
             end
-            instance[key] = value
+            instance[key] = value -- 将设置全局变量的操作代理到instance中
         end;
     })
-end
 
--- 创建模块并继承一个父模块
-SpaceExtend = function(parent)
-    return function(instance)
-        return Space(instance, parent)
+    for _, value in pairs(instance) do
+        if (type(value) == "function") then
+            SetEnvProxy(value, proxy_closure)
+        end
     end
+    return proxy_instance
 end
 ```
 
@@ -296,12 +306,6 @@ local module = Space {
             print(this.key)
         end
 
-        this.inner_module = SpaceExtend(this) {
-            main = function()
-                print(super.key) -- 访问父模块属性
-            end;
-        }
-
     end;
 }
 
@@ -316,12 +320,8 @@ end
 module.outer_test() -- new_value
 
 print(module.key) -- new_value
-
-module.inner_module.main() -- new_value
 ```
 
-这一版基本满足了我的需求，能够直接在函数中访问模块属性，有效解决模块界线不清晰和变量污染的问题，同时避免了模块被重新赋值引起的函数引用失效。
-
-Github地址：[lua-space](https://github.com/renxian-xx/lua-space.git)
+这一版的变量访问变得很明确，将全局变量和模块属性区分开了，在模块内容动态修改方面也更加灵活，在后续主要使用的也是这个版本。
 
 
