@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" fill="none" stroke-width="2" stroke="#97caf9" stroke-linecap="round"
+     stroke-linejoin="round">
+
+
+    <path d="M 10 10, 50 90"/>
+    <path d="M 10 10, 70 90"/>
+    <path d="M 50 90, C 55 85, 65 85, 70 90"/>
+
+    <path d="M 10 10, 90 50"/>
+    <path d="M 10 10, 90 70"/>
+    <path d="M 90 50, C 85 55, 85 65, 90 70"/>
+
+    <path d="M 70 90, C 70 80, 80 70, 90 70"/>
+
+    <path d="M 75 80, 80 85, 83 85, 88 90, 88 93, 95 100, 100 110"/>
+    <path d="M 80 75, 95 90, 105 100, 100 110"/>
+
+    <path d="M 84 88, 85 89"/>
+
+
+</svg>
