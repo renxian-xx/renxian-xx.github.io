@@ -11,7 +11,7 @@ tags:
 
 说实话，我并不太喜欢这种方式，因为它需要定义一个类，然后使用该类的实例来接受json数据，随着接口的增多，类的数量也会增加。
 
-有的时候json数据很简单，只需要几个字段，这时就需要定义一个类来接收这些字段，再通过实例访问，就显得有些繁琐。
+有的时候json数据很简单，只有几个字段，这时通过定义一个类来接收这些字段，再通过实例访问，就显得有些繁琐。
 
 例如：
 
@@ -334,4 +334,4 @@ public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer m
 }
 ```
 
-Github地址：
+Github地址：(json-inject-starter)[https://github.com/renxian-xx/json-inject-starter.git]
