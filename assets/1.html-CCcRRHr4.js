@@ -1,0 +1,1 @@
+import{_ as e,c as t,o as a}from"./app-CiE264yX.js";const o={};function r(c,n){return a(),t("div")}const i=e(o,[["render",r]]),l=JSON.parse('{"path":"/categories/huanshijiemozukaifa/1.html","title":"","lang":"zh-CN","frontmatter":{"layout":"Categories"},"headers":[],"git":{},"filePathRelative":null}');export{i as comp,l as data};
